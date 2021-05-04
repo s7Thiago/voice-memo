@@ -25,6 +25,15 @@ export default class Controller {
     async onStopRecording() {
         console.log('A gravação parou!');
         this.recorder.stopRecording();
+
+        // Como o processo de pegar a url completa demora alguns milissegundos para ser
+        // completado, foi adicionada esta espera para que a chamada de stopRecording()
+        // ocorra obrigatoriamente antes desta chamada demorada dentro do setTimeOut();
+        setTimeout(() => {
+            const audioUrl = this.recorder.getRecordingUrl();
+            this.view.playAudio(audioUrl);
+        });
+
     }
 
 }

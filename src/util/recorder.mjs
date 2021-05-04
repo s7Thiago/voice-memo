@@ -32,13 +32,13 @@ export default class Recorder {
         const options = this._setup();
         this.mediaRecorder = new MediaRecorder(stream, options);
 
-        this.mediaRecorder.onStop = (event) => {
+        this.mediaRecorder.onstop = (event) => {
             console.log('Recorded blobs', this.recordedBlobs);
         }
 
         // Verificando se há dados para gravar
-        this.mediaRecorder.onDataAvailable = (event) => {
-            if (!event.data || event.data.size) return;
+        this.mediaRecorder.ondataavailable = (event) => {
+            if (!event.data || !event.data.size) return;
 
             // Se houverem dados, adiciona ao array
             this.recordedBlobs.push(event.data);
@@ -57,5 +57,12 @@ export default class Recorder {
         this.mediaRecorder.stop();
         console.log('Media recorded stopped');
 
+    }
+
+
+    // Pega a url dos dados gravados para posteriormente usar na reprodução dos mesmos
+    getRecordingUrl() {
+        const blob = new Blob(this.recordedBlobs, { type: this.audioType });
+        return window.URL.createObjectURL(blob);
     }
 }
